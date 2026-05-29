@@ -14,13 +14,18 @@ type LogrusTrace struct {
 var _ logrus.Hook = (*LogrusTrace)(nil)
 
 func New(opts ...Option) *LogrusTrace {
-	t := &LogrusTrace{
-		levels:     logrus.AllLevels,
-		traceIDKey: "TraceID",
-	}
+	t := &LogrusTrace{}
 
 	for _, opt := range opts {
 		opt(t)
+	}
+
+	if len(t.levels) == 0 {
+		t.levels = logrus.AllLevels
+	}
+
+	if t.traceIDKey == "" {
+		t.traceIDKey = "TraceID"
 	}
 
 	return t

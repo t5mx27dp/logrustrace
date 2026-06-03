@@ -36,6 +36,12 @@ func (t *LogrusTrace) Levels() []logrus.Level {
 }
 
 func (t *LogrusTrace) Fire(entry *logrus.Entry) error {
-	entry.Data[t.traceIDKey] = trace.TraceID(entry.Context)
+	var traceID string
+
+	if entry.Context != nil {
+		traceID = trace.TraceID(entry.Context)
+	}
+
+	entry.Data[t.traceIDKey] = traceID
 	return nil
 }
